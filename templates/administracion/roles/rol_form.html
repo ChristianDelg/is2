@@ -1,0 +1,75 @@
+{% extends 'administracion/base.html' %}
+{% load bootstrap3 %}
+{% load guardian_tags %}
+{% load static %}
+
+{% block contentbase %}
+
+    		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+                <li><a href="{% url "rol_list" %}">Roles</a></li>
+				<li class="active">Agregar</li>
+			</ol>
+		</div><!--/.row-->
+
+        <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li><a href="{% url 'project' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li class="active"><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul></div>
+
+
+
+
+    <form action="" method="post" role="form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.name.errors }}
+            {{ form.name.label_tag }}
+            {{ form.name }}
+
+        </div>
+        <h3>Permisos</h3>
+
+            <div class="row">
+
+                <div class="form-group">
+                    <div class="col-lg-6 permisos-checkboxes">
+                        {% bootstrap_field form.perms_proyecto %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+
+        <div class="row">
+             <div class="form-group">
+                <div class="col-lg-4">
+                    <h5>{{ form.perms_user.label_tag }}</h5>
+                    {{ form.perms_user.errors }}
+                    {{ form.perms_user }}
+                </div>
+                <div class="col-lg-4">
+                    <h5>{{ form.perms_group.label_tag }}</h5>
+                    {{ form.perms_group.errors }}
+                    {{ form.perms_group }}
+                </div>
+             </div>
+        </div>
+        <input type="submit" value="{{ current_action }}" class="btn btn-default"/>
+    </form>
+
+{% endblock %}
+

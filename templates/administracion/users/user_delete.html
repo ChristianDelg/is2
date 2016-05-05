@@ -1,0 +1,22 @@
+{% extends 'administracion/base.html' %}
+{% block contentbase %}
+
+    		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+                <li><a href="{% url "user_list" %}">Usuarios</a></li>
+				<li class="active">Delete</li>
+			</ol>
+		</div><!--/.row-->
+
+<form action="" method="post" role="form">
+    {% csrf_token %}
+    <div class="form-group">
+        <p>Seguro de que desea eliminar el usuario <strong>{{ usuario }}</strong>?</p>
+    </div>
+
+    <input type="submit" value="Confirmar" class="btn btn-default"/>
+</form>
+
+
+{% endblock %}
