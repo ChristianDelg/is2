@@ -1,0 +1,44 @@
+{% extends 'administracion/base.html' %}
+{% load guardian_tags %}
+
+{% block contentbase %}
+
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
+    <div class="page-header"><h1>Error en {{ userstory.nombre_largo | title}}</h1></div>
+    <div class="row center-block">
+        <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <h4><span class="fa fa-times"> </span>Error </h4>
+                    </div>
+                    <div class="panel-body">
+                        {% if error == "SPRINT_VENCIDO" %}
+                            <p>No puede registrar su avance en el User Story <strong>{{ userstory.nombre | title }}</strong> debido a que el último sprint al cual se ha asociado el mismo ya <strong>ha llegado a su fecha de finalización.</strong> Este User Story estará disponible recien cuando se lo incluya en un nuevo sprint.</p>
+                            <p>El último sprint al que fue incorporado el mismo fue <a href="{% url 'sprint_detail' userstory.sprint.pk %}"> {{ userstory.sprint }}</a> </p>
+                        {% endif %}
+                        {% if error == "MENOR_PRIORIDAD" %}
+                            <p>No puede registrar su avance en el User Story <strong>{{ userstory.nombre | title }}</strong> debido a que en la actividad <strong>{{ userstory.actividad }}</strong> del flujo <strong>{{ userstory.flujo }}</strong> en el sprint actual <strong>({{ userstory.sprint }})</strong> hay otros User Story de mayor prioridad.</p>
+                            <p>La prioridad actual de este User Story es: <strong>{{ userstory.get_prioridad_display }}</strong>.</p>
+                        {% endif %}
+                        {% if error == "OTRO_ESTADO" %}
+                            <p>No puede registrar su avance en el User Story  <strong>{{ userstory.nombre | title }}</strong> debido a que el mismo se encuentra en estado <strong>{{ userstory.get_estado_display }}</strong> y no en el estado <strong>En Curso</strong>. </p>
+                        {% endif %}
+                    </div>
+                </div>
+    </div>
+    <p><a class="fa fa-step-backward" href="{% url 'product_backlog' userstory.proyecto.id %}"> Volver a User Stories</a></p>
+
+{% endblock %}

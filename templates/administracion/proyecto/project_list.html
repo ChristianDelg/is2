@@ -4,19 +4,53 @@
 {% block contentbase %}
 
 
+
+
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-                <li><a href="{% url "project" %}">Proyectos</a></li>
 				<li class="active">Lista de Proyectos</li>
 			</ol>
 		</div><!--/.row-->
 
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">Proyectos</h1>
+        <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
 			</div>
-		</div><!--/.row-->
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
+
+{% if perms.administracion.add_proyecto %}
+            <div class="col-xs-12 col-md-6 col-lg-3">
+
+    <a href="{% url 'project_create' %}">
+				<div class="panel panel-blue panel-widget ">
+
+					<div class="row no-padding">
+						<div class="col-sm-3 col-lg-5 widget-left">
+
+							<svg class="glyph stroked plus sign"><use xlink:href="#stroked-plus-sign"/></svg>
+						</div>
+						<div class="col-sm-9 col-lg-7 widget-right">
+							<div class="large">Crear</div>
+							<div class="text-muted">Proyecto</div>
+						</div>
+					</div>
+				</div>
+        </a>
+
+    </div>
+
+{% endif %}
+
 
 
 		<div class="row">
@@ -58,7 +92,8 @@
                                         <th>Estado</th>
                                         <th>Fecha de Inicio</th>
                                         <th>Fecha de Finalizacion</th>
-
+                                        <th>Detalles del proyecto</th>
+                                        <th>Editar Proyecto</th>
                                    {% endblock %}
                                     {% block tbody %}
 
@@ -74,13 +109,18 @@
                                                 <td style>{{ p.get_estado_display }}</td>
                                                 <td style>{{ p.fecha_inicio|date:"SHORT_DATE_FORMAT" }}</td>
                                                 <td style>{{ p.fecha_fin|date:"SHORT_DATE_FORMAT" }}</td>
-                                                <td style>
 
+                                                <td style>
+                                                {% if p.estado == 'EJ' or p.estado == 'PL'  %}
                                                     {% if "ver_proyecto" in proyecto_perms %}
                                                          <a href="{{ p.get_absolute_url }}"><button type="submit" class="btn btn-default btn-md">Ver</button></a>
-                                                     {% else %}
-                                                            <td><i class="fa fa-eye fa-fw"></i></td>
                                                      {% endif %}
+                                                {% endif %}
+                                                </td>
+                                                <td style>
+                                                    {% if "change_proyecto" in proyecto_perms %}
+                                                         <a href="{% url 'project_update' p.id %}"><button type="submit" class="btn btn-warning btn-md">Editar</button></a>
+                                                    {% endif %}
 
                                                 </td>
                                             </tr>

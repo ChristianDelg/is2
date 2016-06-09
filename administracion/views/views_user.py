@@ -1,11 +1,11 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.forms import modelform_factory
+from django.forms.models import modelform_factory
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from guardian.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User, Permission, Group
 from administracion.forms import UserCreateForm, UserEditForm
 from administracion.views.views import CreateViewPermissionRequiredMixin, GlobalPermissionRequiredMixin
 
@@ -53,6 +53,7 @@ class AddUser(LoginRequiredMixin, CreateViewPermissionRequiredMixin, generic.Cre
     template_name = 'administracion/users/user_form.html'
     permission_required = 'auth.add_user'
 
+
     def get_context_data(self, **kwargs):
         context = super(AddUser, self).get_context_data(**kwargs)
         context['current_action'] = 'Agregar'
@@ -63,7 +64,7 @@ class AddUser(LoginRequiredMixin, CreateViewPermissionRequiredMixin, generic.Cre
         Retorno url del usuario
         :return:url del UserDetail
         """
-        return reverse('user_detail', kwargs={'pk':self.object.id})
+        return reverse('user_detail', kwargs={'pk': self.object.id})
 
     def form_valid(self, form):
         """

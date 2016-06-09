@@ -1,0 +1,32 @@
+{% extends 'administracion/base.html' %}
+{% load bootstrap3 %}
+{% block title %}{{ action | title }} User Story{% endblock %}
+
+
+{% block header %}{{ userstory.nombre }} {% endblock %}
+{% block content %}
+
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
+<form action="" method="post" role="form">
+    {% csrf_token %}
+    <div class="form-group">
+        <p>Indique dónde reubicar el User Story <strong>{{ object }}</strong> a continuación, o si desea haga clic <a href="{% url 'project:userstory_cancelar' object.id %}">aquí</a> para cancelarlo.</p>
+    </div>
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="submit" value="Rechazar" class="btn btn-default"/>
+</form>
+{% endblock %}

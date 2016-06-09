@@ -1,17 +1,43 @@
 {% extends 'administracion/base.html' %}
 {% load guardian_tags %}
-{% block title %}{{ proyecto.nombre }}{% endblock %}
-
-
-
-
 {% block contentbase %}
+
+
+
+    <div class="row">
+   <ol class="breadcrumb">
+      <li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+      <li><a href="{%url "project_list" %}">Lista de Proyectos</a></li>
+       <li class="active">Detalles de Proyecto</li>
+   </ol>
+</div><!--/.row-->
+
+
+
+
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
     {% get_obj_perms user for proyecto as "proyecto_perms" %}
     <h3>{{ proyecto.nombre }}</h3>
+
+
     <ul class="list-inline">
-        {% if 'change_proyecto' in proyecto_perms %}<li><a href="{% url 'project_update' proyecto.id %}" class="fa fa-pencil"> Modificar</a></li>{% endif %}
+        <a href="{% url 'product_backlog' proyecto.id %}"><i class="glyphicon glyphicon-eye-open"></i>Ver Product Backlog</a>    |
 
-
+        {% if 'change_proyecto' in proyecto_perms %}<li><a href="{% url 'project_update' proyecto.id %}" class="glyphicon glyphicon-pencil">Editar</a></li>{% endif %}
 
 
     </ul>
@@ -28,34 +54,66 @@
 
             </div>
         </div>
-        <div class="col-lg-4">
 
-        </div>
 
     </div>
 
 
 
-<div class="row">
-        <div class="col-lg-4">
-            <h4 class="list-group-item-heading">
-                <a href="{% if perms.proyecto.change_proyecto %}
-                {% url 'project_update' proyecto.id %}#equipo
-                {% else %}#{% endif %}">Equipo</a>
-            </h4>
+    <div class="row">
+            <div class="col-lg-4">
+                <h4 class="list-group-item-heading">
+                    <a href="{% if perms.proyecto.change_proyecto %}
+                    {% url 'project_update' proyecto.id %}#equipo
+                    {% else %}#{% endif %}">Equipo</a>
+                </h4>
+                <div class="list-group">
+                    {% for m in team %}
+                        <a href="{% url 'user_detail' m.usuario_id %}" class="list-group-item">
+                            {{ m.usuario }}
+                            {% for r in m.roles.all %}
+                                <span class="badge" data-toggle="tooltip" data-placement="left"
+                                  title="Rol">{{ r }}</span>
+                            {% endfor %}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+
+
+    <div class="col-lg-4">
+            <h4 class="list-group-item-heading"><a href="{% url 'sprint_list' proyecto.id %}">Sprints</a></h4>
             <div class="list-group">
-                {% for m in team %}
-                    <a href="{% url 'user_detail' m.usuario_id %}" class="list-group-item">
-                        {{ m.usuario }}
-                        {% for r in m.roles.all %}
-                            <span class="badge" data-toggle="tooltip" data-placement="left"
-                              title="Rol">{{ r }}</span>
-                        {% endfor %}
+
+                    {% for s in sprints %}
+                    <a href="{% url 'sprint_detail' s.id %}" class="list-group-item">{{ s.nombre }}
+                        <span class="badge" data-toggle="tooltip" data-placement="right"
+                              title="Fecha de Inicio">{{ s.userstory_set.count }}</span>
                     </a>
                 {% endfor %}
+
             </div>
         </div>
 
+
+    <div class="row">
+
+    <div class="col-lg-4">
+            <h4 class="list-group-item-heading"><a href="{% url 'flujo_list' proyecto.id %}">Flujos</a></h4>
+
+            <div class="list-group">
+                {% for f in flujos %}
+                    <a href="{% url 'flujo_detail' f.id %}" class="list-group-item">{{ f.nombre }}
+                        <span class="badge" data-toggle="tooltip" data-placement="right"
+                              title="Actividades">{{ f.actividad_set.count }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+    </div>
+    </div>
 
         </div>
 

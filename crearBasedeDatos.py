@@ -6,14 +6,14 @@ conn = psycopg2.connect(database="postgres", user="postgres", password="postgres
 conn.set_isolation_level(0)
 cursor = conn.cursor()
 try:
-    cursor.execute('DROP DATABASE is2')
+    cursor.execute('DROP DATABASE is2v')
     print ("La base de datos fue eliminada.")
 except psycopg2.ProgrammingError:
     print ("La base de datos no existe.")
 except psycopg2.OperationalError:
     print ("La base de datos esta siendo utilizada. No se puede eliminar.")
     sys.exit(1)
-cursor.execute('CREATE DATABASE is2')
+cursor.execute('CREATE DATABASE is2v')
 cursor.close()
 conn.close()
 print ("Base de Datos fue creada.")

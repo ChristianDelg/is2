@@ -1,0 +1,83 @@
+{% extends "administracion/base.html" %}
+{% load bootstrap3 %}
+{% load guardian_tags %}
+{% block contentbase %}
+
+
+
+        <div class="row" xmlns="http://www.w3.org/1999/html">
+			<ol class="breadcrumb">
+				<li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+                <li><a href="{% url "project_list"  %}">Lista de Proyectos</a></li>
+				<li><a href="#">Detalles de Proyecto</a></li>
+
+                <li>Agregar User Stories</li>
+
+
+
+			</ol>
+		</div><!--/.row-->
+
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
+
+        <div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+                    <div class="col-md-12">
+					    <div class="page-header"><h1>User Storys</h1></div>
+                    </div>
+					<div class="panel-body">
+						<div class="col-md-12">
+
+
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                    <div class="row">
+                                    <div class="col-lg-2">{% bootstrap_field form.nombre_corto  %}</div>
+                                    <div class="col-lg-3">{% bootstrap_field form.nombre_largo  %}</div>
+                                    <div class="col-lg-8">{% bootstrap_field form.descripcion  %}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="panel-body">
+                                            {% if form.prioridad %}<div class="col-lg-3">{% bootstrap_field form.prioridad layout='horizontal' %}</div>{% endif %}
+                                            <div class="col-lg-3">{% bootstrap_field form.valor_negocio layout='horizontal' %}</div>
+                                            <div class="col-lg-3">{% bootstrap_field form.valor_tecnico layout='horizontal' %}</div>
+                                            <div class="col-lg-3">{% bootstrap_field form.tiempo_estimado layout='horizontal' %}</div>
+                                        </div>
+                                        </div>
+                                <div class="row">
+                                {% buttons submit='Guardar' reset="Reset" %}
+                                    <a href="javascript:history.back()">
+                                        <button type="button" class="btn btn-danger">Cancelar</button>
+                                    </a>
+                                {% endbuttons %}
+                                </div>
+                            </form>
+
+					    </div>
+				</div>
+			</div><!-- /.col-->
+		</div><!-- /.row -->
+
+
+
+
+
+
+{% endblock %}
+
+

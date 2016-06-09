@@ -1,0 +1,97 @@
+{% extends "administracion/base.html" %}
+{% load static %}
+
+
+{% block contentbase %}
+    <div class="row">
+   <ol class="breadcrumb">
+      <li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+      <li><a href="{%url "project_list" %}">Lista de Proyectos</a></li>
+       <li><a href="">Detalles de Proyecto</li></a>
+       <li class="active"> Lista de Flujos</li>
+   </ol>
+</div><!--/.row-->
+
+
+      <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+<form role="search">
+   <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search">
+   </div>
+</form>
+<ul class="nav menu">
+   <li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+          <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+          <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+      </ul>
+  </div>
+
+
+
+    <script src="{% static 'lumino/js/jquery.formset.js' %}"></script>
+    <script src="{% static 'lumino/js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('.activity').formset({
+            prefix: '{{ actividad_form.prefix }}',
+            addText: 'Agregar actividad',
+            deleteText: 'Eliminar'
+        });
+        $('.sortable').sortable({
+            cursor: 'move',
+            update: function(event, ui) {
+                //reiniciamos conteo de posiciones
+                var currentPos = 1;
+                var camposName = $("input[id$='-name']");
+                var camposOrder = $("input[id$='-ORDER']");
+                for(var i=0; i<camposOrder.length; i++) {
+                    var elem = camposOrder.eq(i);
+                    var elemName = camposName.eq(i);
+                    if(elemName.val()) {
+                        elem.val(currentPos);
+                        currentPos++;
+                    }
+                }
+            }
+        });
+    })
+    </script>
+
+{% block title %}<strong><h1>Flujo</strong></h1>{% endblock %}
+
+    <style media="screen" type="text/css">
+        input[id$='-ORDER'] { display: none; }
+    </style>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.as_p }}
+        </div>
+        <fieldset>
+            <legend> Actividades</legend>
+            <div class="sortable">
+            {{ actividad_form.management_form }}
+            {{ actividad_form.non_form_errors }}
+                {%for form in actividad_form %}
+
+                    {{ form.id }}
+                    <div  class="activity form-group">
+                    <span class="fa fa-arrows"> </span>
+                    {{ form.nombre.errors }}
+                   <label> {{ form.nombre.label_tag }}</label>
+                   {{ form.nombre }}
+                    {% if actividad_form.can_order %}
+                        {{ form.ORDER }}
+                        {{ form.DELETE }}
+                    {% endif %}
+                    </div>
+            {% endfor %}
+            </div>
+        </fieldset>
+        <input type="submit" value="{{ current_action }}" class="btn btn-default"/>
+    </form>
+
+
+{% endblock %}
+
+

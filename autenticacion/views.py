@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.shortcuts import HttpResponsePermanentRedirect
 from django.contrib.auth import authenticate, login
-from django.template.context_processors import csrf
+from django.core.context_processors import csrf
 
 
 
@@ -15,7 +15,7 @@ def login_view(request):
 
 
     """
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_active == True :
         return HttpResponsePermanentRedirect('/index')
     else:
         c = {}
@@ -46,7 +46,7 @@ def index(request):
 
 
      """
-     if request.user.is_authenticated():
+     if request.user.is_authenticated() and request.user.is_active == True:
          return render_to_response('administracion/index.html', {'full_name': request.user.username})
      else:
          return HttpResponsePermanentRedirect('/login')

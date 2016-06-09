@@ -5,6 +5,33 @@
 
 {% block contentbase %}
 
+
+    <div class="row">
+   <ol class="breadcrumb">
+      <li><a href="{% url "index" %}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+      <li><a href="{%url "project_list" %}">Lista de Proyectos</a></li>
+       <li class="active">Creación de Proyectos</li>
+   </ol>
+</div><!--/.row-->
+
+
+
+
+
+    <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li class="active"><a href="{% url 'project_list' %}"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Proyectos</a></li>
+            <li><a href="{% url 'user_list' %}"><svg class="glyph stroked male user "><use xlink:href="#stroked-male-user"/></svg> Usuarios</a></li>
+            <li><a href="{% url 'rol_list' %}"><svg class="glyph stroked key "><use xlink:href="#stroked-key"/></svg> Roles</a></li>
+
+        </ul>
+    </div>
     {% block extrahead %}
     <script src="{% static 'lumino/js/jquery.formset.js' %}"></script>
     <script type="text/javascript">
@@ -39,6 +66,8 @@
                                         <p class="help-block">Fecha de inicio debe ser menor o igual al de finalizacion.</p>
                                         {% bootstrap_field form.fecha_inicio %}
                                         {% bootstrap_field form.fecha_fin %}
+                                        {% bootstrap_field form.duracion_sprint %}
+                                        {% bootstrap_field form.estado %}
                                     </div>
 
                                 </div>
@@ -55,7 +84,24 @@
                                                     {% if subform.instance.pk %}
                                                         {% bootstrap_field subform.DELETE %}{% endif %}
                                                     {% bootstrap_field subform.usuario %}
-                                                    {% bootstrap_field subform.roles %}
+                                                     {% bootstrap_field subform.roles %}
+{##}
+{#                                                    {% if user.is_superuser == True %}#}
+{#                                                     {% for roli in subform.roles%}#}
+{#                                                         {% if forloop.first %}#}
+{#                                                        {{ roli  }}#}
+{#                                                         {% endif %}#}
+{#                                                    {% endfor %}#}
+{#                                                    {% elif user.is_superuser == False and not forloop.first %}#}
+{#                                                        {% for roli in subform.roles%}#}
+{#                                                        {{ roli  }}#}
+{#                                                        {% endfor %}#}
+{##}
+{#                                                    {% endif %}#}
+
+
+
+
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -82,3 +128,4 @@
 
 
 {% endblock %}
+
